@@ -17,22 +17,33 @@ class _NilaiMahasiswaScreenState extends State<NilaiMahasiswaScreen> {
   double? _nilaiAkhir;
   String? _grade;
 
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), backgroundColor: Colors.red),
+    );
+  }
+
   void _hitungNilai() {
     if (_tugasController.text.isEmpty ||
         _utsController.text.isEmpty ||
         _uasController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Semua field harus diisi!'),
-          backgroundColor: Colors.red,
-        ),
-      );
+      _showError('Semua field harus diisi!');
       return;
     }
 
-    final tugas = double.tryParse(_tugasController.text) ?? 0;
-    final uts = double.tryParse(_utsController.text) ?? 0;
-    final uas = double.tryParse(_uasController.text) ?? 0;
+    final tugas = double.tryParse(_tugasController.text);
+    final uts = double.tryParse(_utsController.text);
+    final uas = double.tryParse(_uasController.text);
+
+    if (tugas == null || uts == null || uas == null) {
+      _showError('Semua nilai harus berupa angka!');
+      return;
+    }
+
+    if (tugas > 100 || uts > 100 || uas > 100) {
+      _showError('Nilai tidak boleh lebih dari 100!');
+      return;
+    }
 
     final nilaiAkhir = (tugas + uts + uas) / 3;
     String grade;
