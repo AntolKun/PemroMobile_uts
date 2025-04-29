@@ -18,6 +18,18 @@ class _NilaiMahasiswaScreenState extends State<NilaiMahasiswaScreen> {
   String? _grade;
 
   void _hitungNilai() {
+    if (_tugasController.text.isEmpty ||
+        _utsController.text.isEmpty ||
+        _uasController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Semua field harus diisi!'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
     final tugas = double.tryParse(_tugasController.text) ?? 0;
     final uts = double.tryParse(_utsController.text) ?? 0;
     final uas = double.tryParse(_uasController.text) ?? 0;
